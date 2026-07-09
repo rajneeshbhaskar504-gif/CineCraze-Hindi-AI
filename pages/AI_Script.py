@@ -95,3 +95,14 @@ if st.button("🎬 Generate Animation Scenes"):
             scenes,
             file_name="scene_prompts.txt"
         )
+from utils.voice import generate_voice
+
+if st.button("🎤 Generate Voice"):
+    audio_file = generate_voice(script)
+    st.audio(audio_file)
+    with open(audio_file, "rb") as f:
+        st.download_button(
+            "⬇️ Download Voice",
+            f,
+            file_name="voice.mp3"
+        )
