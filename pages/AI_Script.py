@@ -61,3 +61,25 @@ Requirements:
 - Make it engaging for YouTube.
 - Add a strong intro and ending.
 """
+    with st.spinner("🤖 AI Script बना रहा है..."):
+
+        try:
+            response = model.generate_content(prompt)
+
+            script = response.text
+
+            st.success("✅ Script Ready")
+
+            st.subheader("📜 Generated Script")
+            st.write(script)
+
+            st.download_button(
+                label="📥 Download Script",
+                data=script,
+                file_name=f"{movie_name}_script.txt",
+                mime="text/plain"
+            )
+
+        except Exception as e:
+            st.error(f"❌ Error: {e}")
+            
