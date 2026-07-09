@@ -1,13 +1,23 @@
 import streamlit as st
+import google.generativeai as genai
 
 st.set_page_config(
     page_title="AI Script Generator",
-    page_icon="🤖"
+    page_icon="🎬",
+    layout="wide"
 )
 
-st.title("🤖 AI Movie Script Generator")
+st.title("🎬 CineCraze Hindi AI")
 
-movie_name = st.text_input("🎬 Enter Movie Name")
+# API Key
+try:
+    genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+    model = genai.GenerativeModel("gemini-2.5-flash")
+except Exception:
+    st.error("❌ Gemini API Key नहीं मिली। Settings → Secrets में GEMINI_API_KEY जोड़ें।")
+    st.stop()
+
+movie_name = st.text_input("🎥 Movie Name")
 
 language = st.selectbox(
     "Language",
@@ -15,50 +25,39 @@ language = st.selectbox(
 )
 
 style = st.selectbox(
-    "Style",
+    "Script Style",
     [
         "Movie Explained",
         "Emotional",
-        "Suspense",
-        "Funny"
+        "Funny",
+        "Suspense"
     ]
 )
 
 duration = st.slider(
-    "Video Duration (Minutes)",
+    "Video Length (Minutes)",
     5,
     20,
     10
 )
 
-if st.button("Generate Script"):
+if st.button("🚀 Generate Script"):
 
     if movie_name == "":
-        st.warning("Please Enter Movie Name")
-    else:
+        st.warning("Movie Name लिखें")
+        st.stop()
 
-        script = f"""
-Movie : {movie_name}
+    prompt = f"""
+Write an ORIGINAL YouTube movie explanation script.
 
-Language : {language}
+Movie: {movie_name}
+Language: {language}
+Style: {style}
+Duration: {duration} minutes
 
-Style : {style}
-
-Duration : {duration} Minutes
-
-⚠️ AI Script Generator अभी API से Connect नहीं हुआ है।
-
-जल्द ही यहाँ AI द्वारा बनाई गई Script दिखाई देगी।
+Requirements:
+- Write an original script in your own words.
+- Do not copy dialogue from the movie.
+- Make it engaging for YouTube.
+- Add a strong intro and ending.
 """
-
-        st.text_area(
-            "Generated Script",
-            script,
-            height=350
-        )
-
-        st.download_button(
-            "📥 Download Script",
-            script,
-            file_name=f"{movie_name}.txt"
-        )
