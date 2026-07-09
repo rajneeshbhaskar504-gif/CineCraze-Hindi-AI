@@ -1,6 +1,6 @@
 import streamlit as st
 import google.generativeai as genai
-
+from utils.image_prompt import generate_scene_prompts
 st.set_page_config(
     page_title="AI Script Generator",
     page_icon="🎬",
@@ -83,3 +83,15 @@ Requirements:
         except Exception as e:
             st.error(f"❌ Error: {e}")
             
+if st.button("🎬 Generate Animation Scenes"):
+    with st.spinner("Animation Scenes बना रहे हैं..."):
+        scenes = generate_scene_prompts(movie_name, script)
+
+        st.subheader("🎨 Animation Scene Prompts")
+        st.write(scenes)
+
+        st.download_button(
+            "📥 Download Scene Prompts",
+            scenes,
+            file_name="scene_prompts.txt"
+        )
