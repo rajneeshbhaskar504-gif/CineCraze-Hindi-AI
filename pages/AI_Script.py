@@ -107,3 +107,7 @@ if st.button("🎤 Generate Voice"):
             f,
             file_name="voice.mp3"
         )
+st.divider()
+
+if st.button("🎬 Create Final Video"):
+    st.info("अभी यह फीचर अगले स्टेप में Scene Images के साथ पूरा होगा।")
