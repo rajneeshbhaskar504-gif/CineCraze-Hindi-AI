@@ -86,28 +86,42 @@ script = st.session_state.script
         except Exception as e:
             st.error(f"❌ Error: {e}")
             
-if st.button("🎬 Generate Animation Scenes"):
-    with st.spinner("Animation Scenes बना रहे हैं..."):
-        scenes = generate_scene_prompts(movie_name, script)
+if st.session_state.script:
 
-        st.subheader("🎨 Animation Scene Prompts")
-        st.write(scenes)
+    if st.button("🎬 Generate Animation Scenes"):
 
-        st.download_button(
-            "📥 Download Scene Prompts",
-            scenes,
-            file_name="scene_prompts.txt"
+        with st.spinner("Animation Scenes बना रहे हैं..."):
+
+            scenes = generate_scene_prompts(
+                movie_name,
+                st.session_state.script
+            )
+
+            st.subheader("🎨 Animation Scene Prompts")
+            st.write(scenes)
+
+            st.download_button(
+                "📥 Download Scene Prompts",
+                scenes,
+                file_name="scene_prompts.txt"
+            )
+if st.session_state.script:
+
+    if st.button("🎤 Generate Voice"):
+
+        audio_file = generate_voice(
+            st.session_state.script
         )
 
-if st.button("🎤 Generate Voice"):
-    audio_file = generate_voice(script)
-    st.audio(audio_file)
-    with open(audio_file, "rb") as f:
-        st.download_button(
-            "⬇️ Download Voice",
-            f,
-            file_name="voice.mp3"
-        )
+        st.audio(audio_file)
+
+        with open(audio_file, "rb") as f:
+
+            st.download_button(
+                "⬇️ Download Voice",
+                f,
+                file_name="voice.mp3"
+            )
 st.divider()
 
 if st.button("🎬 Create Final Video"):
