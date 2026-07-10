@@ -1,29 +1,26 @@
-import google.generativeai as genai
+import requests
+import os
 
-def generate_image_prompt(scene):
-    try:
-        model = genai.GenerativeModel("gemini-1.5-flash")
+API_URL = "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell"
 
-        prompt = f"""
-Create ONE detailed animation image prompt.
+def generate_image(prompt, output_file, hf_token):
+    headers = {
+        "Authorization": f"Bearer {hf_token}"
+    }
 
-Style:
-Original 3D animated movie,
-Pixar-inspired,
-cinematic lighting,
-expressive characters,
-ultra detailed,
-8K quality.
+    response = requests.post(
+        API_URL,
+        headers=headers,
+        json={"inputs": prompt},
+        timeout=300
+    )
 
-Scene:
-{scene}
+    if response.status_code != 200:
+        raise Exception(f"Hugging Face Error: {response.text}")
 
-Return ONLY the image prompt.
-"""
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
-        response = model.generate_content(prompt)
+    with open(output_file, "wb") as f:
+        f.write(response.content)
 
-        return response.text
-
-    except Exception as e:
-        return f"Error: {e}"
+    return output_file
