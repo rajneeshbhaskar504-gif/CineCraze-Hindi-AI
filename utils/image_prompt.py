@@ -24,12 +24,19 @@ For each scene generate:
 Animation Style:
 Pixar inspired 3D animation, cinematic lighting, expressive characters, colorful, ultra detailed, original design.
 
-Return only scene prompts.
+Return in a format where each scene starts with the word 'Scene'.
 """
 
         response = model.generate_content(prompt)
 
-        return response.text
+        # 20 Scenes ki List generate karna
+        scenes = [
+            "Scene" + scene.strip()
+            for scene in response.text.split("Scene")
+            if scene.strip()
+        ]
+
+        return scenes
 
     except Exception as e:
-        return f"Error: {e}"
+        return [f"Error: {e}"]
