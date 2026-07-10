@@ -68,7 +68,8 @@ Requirements:
         try:
             response = model.generate_content(prompt)
 
-            script = response.text
+            st.session_state.script = response.text
+script = st.session_state.script
 
             st.success("✅ Script Ready")
 
