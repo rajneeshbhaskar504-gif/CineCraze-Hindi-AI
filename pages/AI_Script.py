@@ -1,4 +1,5 @@
-  from utils.video import create_video
+from utils.video import create_video
+from utils.voice import generate_voice
 import streamlit as st
 import google.generativeai as genai
 from utils.image_prompt import generate_scene_prompts
